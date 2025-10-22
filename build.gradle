@@ -1,0 +1,141 @@
+plugins {
+	id 'fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+    id 'com.google.protobuf' version "0.9.5"
+    id 'java'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+repositories {
+    mavenCentral()
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"modid" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    modImplementation("com.google.protobuf:protobuf-java:4.33.0")
+    modImplementation("com.google.protobuf:protobuf-java-util:4.33.0")
+
+    include("com.google.protobuf:protobuf-java:4.33.0")
+    include("com.google.protobuf:protobuf-java-util:4.33.0")
+
+    // Hibernate
+    modImplementation  'org.hibernate.orm:hibernate-core:6.4.4.Final'
+    modImplementation  'org.postgresql:postgresql:42.7.2'
+    modImplementation  'com.zaxxer:HikariCP:5.1.0'
+
+    include('org.hibernate.orm:hibernate-core:6.4.4.Final')
+    include('org.postgresql:postgresql:42.7.2')
+    include('com.zaxxer:HikariCP:5.1.0')
+
+    // JPA
+    modImplementation  'jakarta.persistence:jakarta.persistence-api:3.1.0'
+    modImplementation  'jakarta.transaction:jakarta.transaction-api:2.0.1'
+
+    include("jakarta.persistence:jakarta.persistence-api:3.1.0")
+    include("jakarta.transaction:jakarta.transaction-api:2.0.1")
+
+    modImplementation  'org.postgresql:postgresql:42.7.7'
+    include 'org.postgresql:postgresql:42.7.7'
+
+    // Hibernate JPA
+    modImplementation 'org.hibernate.orm:hibernate-jpamodelgen:6.3.1.Final'
+    include 'org.hibernate.orm:hibernate-jpamodelgen:6.3.1.Final'
+
+    modImplementation 'org.jboss.logging:jboss-logging:3.5.3.Final'
+    include 'org.jboss.logging:jboss-logging:3.5.3.Final'
+
+    modImplementation 'net.bytebuddy:byte-buddy:1.14.8'
+    include 'net.bytebuddy:byte-buddy:1.14.8'
+
+    modImplementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    include 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+
+    modImplementation 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+    include 'com.fasterxml.jackson.core:jackson-core:2.15.2'
+
+    modImplementation 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+    include 'com.fasterxml.jackson.core:jackson-annotations:2.15.2'
+
+    modImplementation 'org.antlr:antlr4-runtime:4.13.0'
+    include 'org.antlr:antlr4-runtime:4.13.0'
+
+    modImplementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    include 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+
+    modImplementation 'io.smallrye:jandex:3.1.2'
+    include 'io.smallrye:jandex:3.1.2'
+
+    modImplementation 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
+    include 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
+
+    modImplementation 'com.fasterxml:classmate:1.5.1'
+    include 'com.fasterxml:classmate:1.5.1'
+
+    modImplementation 'org.javassist:javassist:3.29.2-GA'
+    include 'org.javassist:javassist:3.29.2-GA'
+
+    modImplementation 'org.antlr:antlr4-runtime:4.9.3'
+    include 'org.antlr:antlr4-runtime:4.9.3'
+	
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": inputs.properties.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+protobuf {
+    protoc {
+       artifact = "com.google.protobuf:protoc:4.33.0"
+    }
+
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	inputs.property "archivesName", project.base.archivesName
+
+	from("LICENSE") {
+		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+
+}

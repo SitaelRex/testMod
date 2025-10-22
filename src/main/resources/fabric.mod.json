@@ -1,0 +1,47 @@
+{
+	"schemaVersion": 1,
+	"id": "dbbutton",
+	"version": "${version}",
+	"name": "DB Button test mod",
+	"description": "r to open screen",
+	"authors": [
+		"Anton Korobov"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/modid/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.sitael.ExampleMod"
+		],
+		"client": [
+			"com.sitael.ExampleModClient"
+		]
+	},
+	"mixins": [
+		"modid.mixins.json",
+		{
+			"config": "modid.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.16.14",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+
+  "jars": [
+    {
+      "file": "META-INF/jars/postgresql-42.7.2.jar"
+    }
+  ],
+	"suggests": {
+		"another-mod": "*"
+	}
+}
